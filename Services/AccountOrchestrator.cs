@@ -1,16 +1,15 @@
 using Services.Domain.Account;
+using Services.Domain.SharedValueObject;
 
 namespace Services;
 
 public class AccountOrchestrator
 {
-    private Accounts accounts;
+    private readonly Accounts _accounts;
     public AccountOrchestrator(Accounts accounts)
-    {
-        this.accounts = accounts;
-    }
-    public void OpenAccount(string accountId, decimal initialBalance)
-    {
-        accounts.Add(new Account(accountId, initialBalance));
-    }
+        => _accounts = accounts;
+
+    public void OpenAccount(
+        AccountId accountId, Money initialBalance)
+        => _accounts.Add(new Account(accountId, initialBalance));
 }

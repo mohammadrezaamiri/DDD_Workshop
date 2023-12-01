@@ -1,3 +1,4 @@
+using Services.Domain.Account;
 using Services.Domain.SharedValueObject;
 
 namespace Services.Domain.Transaction;
@@ -10,48 +11,48 @@ public enum TransferStatus
 
 public class Transaction
 {
-
-
-    public string CreditAccountId { get; }
-    public string DebitAccountId { get; }
+    public TransactionId Id { get; }
+    public AccountId CreditAccountId { get; }
+    public AccountId DebitAccountId { get; }
     public Money Amount { get; }
-
-    public string Id { get; private set; }
-    public DateTime Date { get; private set; }
-    public string Description { get; private set; }
+    public DateTime Date { get; }
+    public string? Description { get; private set; }
     public TransferStatus Status { get; private set; } = TransferStatus.Draft;
 
-    protected Transaction(string id,
+    protected Transaction(
+        TransactionId id,
         DateTime date,
-        string description,
-        string creditAccountId,
-        string debitAccountId,
+        AccountId creditAccountId,
+        AccountId debitAccountId,
         Money amount)
     {
         Id = id;
         Date = date;
-        Description = description;
         CreditAccountId = creditAccountId;
         DebitAccountId = debitAccountId;
         Amount = amount;
     }
 
     public static Transaction Draft(
-        string id,
+        TransactionId id,
         DateTime date,
-        string description,
-        string creditAccountId,
-        string debitAccountId,
+        AccountId creditAccountId,
+        AccountId debitAccountId,
         Money amount)
-        => new Transaction(
+        => new (
             id,
             date,
-            description,
             creditAccountId,
             debitAccountId,
             amount
         );
 
+    public Transaction WithDraftDescription(string description)
+    {
+        Description = description;
+        return this;
+    }
+    
     public void Commit(ITransferService transferService)
     {
         transferService.Transfer(CreditAccountId, DebitAccountId, Amount);

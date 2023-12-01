@@ -4,27 +4,25 @@ using Services.Domain.Transaction;
 namespace Queries;
 
 public record TransferDraftViewModel(
-    string creditAccountId,
-    string debitAccountId,
-    decimal balance,
-    DateTime date);
-
+    string CreditAccountId,
+    string DebitAccountId,
+    decimal Balance,
+    DateTime Date);
 
 public class TransactionQueries
 {
-    readonly Transactions transactions;
+    readonly Transactions _transactions;
+    
     public TransactionQueries(Transactions transactions)
-    {
-        this.transactions = transactions;
-    }
+        => _transactions = transactions;
+
     public IEnumerable<TransferDraftViewModel> AllDrafts()
-        => transactions.All()
+        => _transactions.All()
             .Where(t => t.Status == TransferStatus.Draft)
             .Select(t => new TransferDraftViewModel(
-                t.CreditAccountId,
-                t.DebitAccountId,
+                t.CreditAccountId.Value,
+                t.DebitAccountId.Value,
                 t.Amount.Value,
                 t.Date
             ));
-
 }

@@ -1,16 +1,20 @@
 using Services;
+using Services.Domain.Account;
 
 namespace Queries;
 
 public class AccountQueries
 {
-    Accounts accounts;
+    readonly Accounts _accounts;
+    
     public AccountQueries(Accounts accounts)
-        =>this.accounts = accounts;
-    public BalanceViewModel? GetBalanceForAccount(string accountId)
+        => _accounts = accounts;
+    
+    public BalanceViewModel? GetBalanceForAccount(AccountId accountId)
     {
-        var theAccount= accounts.FindById(accountId);
-        if(theAccount is null) return null;
-        return new BalanceViewModel(Id: theAccount.Id, Balance:theAccount.Balance.Value);
+        var theAccount= _accounts.FindById(accountId);
+        return theAccount is null 
+            ? null 
+            : new BalanceViewModel(theAccount.Id.Value, theAccount.Balance.Value);
     }
 }

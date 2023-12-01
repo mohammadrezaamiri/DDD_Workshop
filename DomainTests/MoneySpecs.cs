@@ -1,8 +1,8 @@
-using AutoFixture;
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Services.Domain.Exceptions;
 using Services.Domain.SharedValueObject;
+using TestTools.Doubles;
 
 namespace DomainTests;
 

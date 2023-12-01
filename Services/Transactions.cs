@@ -1,23 +1,20 @@
-
-
 using Services.Domain.Transaction;
 
 namespace Services;
 
 public class Transactions
 {
-    public List<Transaction> records { get; set; } = new();
+    private readonly List<Transaction> _records = new();
     public void Add(Transaction transaction)
-        => records.Add(transaction);
+        => _records.Add(transaction);
 
-    public Transaction? FindById(string id)
+    public Transaction? FindById(TransactionId id)
         => All().FirstOrDefault(tx => tx.Id == id);
 
     public IEnumerable<Transaction> All()
-        => records;
+        => _records;
 
     public void Update(Transaction draft)
     {
-
     }
 }
