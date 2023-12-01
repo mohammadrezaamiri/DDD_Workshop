@@ -22,9 +22,5 @@ public class Account
     }
 
     public void Debit(Money amount)
-    {
-        Balance += amount;       
-    }
-
-
+        => Balance += amount;       
 }

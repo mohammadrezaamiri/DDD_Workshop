@@ -20,8 +20,8 @@ public class TransactionQueries
         => _transactions.All()
             .Where(t => t.Status == TransferStatus.Draft)
             .Select(t => new TransferDraftViewModel(
-                t.CreditAccountId.Value,
-                t.DebitAccountId.Value,
+                t.Parties.CreditAccountId.Value,
+                t.Parties.DebitAccountId.Value,
                 t.Amount.Value,
                 t.Date
             ));

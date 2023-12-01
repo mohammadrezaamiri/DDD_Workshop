@@ -13,16 +13,15 @@ public class TransferService : ITransferService
         => _accounts = accounts;
 
     public void Transfer(
-        AccountId creditAccountId, 
-        AccountId debitAccountId,
+        TransactionParties parties,
         Money amount)
     {
-        var creditAccount = _accounts.FindById(creditAccountId);
-        var debitAccount = _accounts.FindById(debitAccountId);
+        var creditAccount = _accounts.FindById(parties.CreditAccountId);
+        var debitAccount = _accounts.FindById(parties.DebitAccountId);
 
         if (debitAccount is null)
         {
-            debitAccount = new Account(debitAccountId, 0);
+            debitAccount = new Account(parties.DebitAccountId, 0);
             _accounts.Add(debitAccount);
         }
 

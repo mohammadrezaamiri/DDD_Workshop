@@ -1,5 +1,4 @@
 ﻿using Domain;
-using Domain.Account;
 using Domain.Exceptions;
 using Domain.SharedValueObject;
 using Domain.Transaction;
@@ -20,8 +19,7 @@ public class TransactionOrchestrator
 
     public void DraftTransfer(
         TransactionId transactionId, 
-        AccountId creditAccountId, 
-        AccountId debitAccountId, 
+        TransactionParties parties, 
         Money amount, 
         DateTime transactionDate, 
         string description)
@@ -30,8 +28,7 @@ public class TransactionOrchestrator
             Transaction.Draft(
                 transactionId, 
                 transactionDate, 
-                creditAccountId, 
-                debitAccountId, 
+                parties,
                 amount)
                 .WithDraftDescription(description));
         

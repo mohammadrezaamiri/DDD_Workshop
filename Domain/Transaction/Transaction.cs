@@ -1,4 +1,3 @@
-using Domain.Account;
 using Domain.SharedValueObject;
 
 namespace Domain.Transaction;
@@ -12,8 +11,7 @@ public enum TransferStatus
 public class Transaction
 {
     public TransactionId Id { get; }
-    public AccountId CreditAccountId { get; }
-    public AccountId DebitAccountId { get; }
+    public TransactionParties Parties { get; set; }
     public Money Amount { get; }
     public DateTime Date { get; }
     public string? Description { get; private set; }
@@ -22,30 +20,21 @@ public class Transaction
     protected Transaction(
         TransactionId id,
         DateTime date,
-        AccountId creditAccountId,
-        AccountId debitAccountId,
+        TransactionParties parties,
         Money amount)
     {
         Id = id;
         Date = date;
-        CreditAccountId = creditAccountId;
-        DebitAccountId = debitAccountId;
+        Parties = parties; 
         Amount = amount;
     }
 
     public static Transaction Draft(
         TransactionId id,
         DateTime date,
-        AccountId creditAccountId,
-        AccountId debitAccountId,
+        TransactionParties parties,
         Money amount)
-        => new (
-            id,
-            date,
-            creditAccountId,
-            debitAccountId,
-            amount
-        );
+        => new (id, date, parties, amount);
 
     public Transaction WithDraftDescription(string description)
     {
@@ -55,7 +44,7 @@ public class Transaction
     
     public void Commit(ITransferService transferService)
     {
-        transferService.Transfer(CreditAccountId, DebitAccountId, Amount);
+        transferService.Transfer(Parties, Amount);
         Status = TransferStatus.Commit;
     }
 }
