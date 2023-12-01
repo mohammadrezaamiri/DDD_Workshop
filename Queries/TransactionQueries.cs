@@ -11,9 +11,9 @@ public record TransferDraftViewModel(
 
 public class TransactionQueries
 {
-    readonly Transactions _transactions;
+    readonly ITransactions _transactions;
     
-    public TransactionQueries(Transactions transactions)
+    public TransactionQueries(ITransactions transactions)
         => _transactions = transactions;
 
     public IEnumerable<TransferDraftViewModel> AllDrafts()

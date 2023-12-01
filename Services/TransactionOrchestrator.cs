@@ -8,10 +8,10 @@ namespace Services;
 
 public class TransactionOrchestrator
 {
-    readonly Transactions _transactions;
+    readonly ITransactions _transactions;
     readonly ITransferService _transferService;
     public TransactionOrchestrator(
-        Transactions transactions, 
+        ITransactions transactions, 
         ITransferService transferService)
     {
         _transactions = transactions;

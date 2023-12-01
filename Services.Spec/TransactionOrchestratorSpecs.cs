@@ -3,6 +3,7 @@ using Domain.Account;
 using Domain.SharedValueObject;
 using Domain.Transaction;
 using FluentAssertions;
+using Persistence;
 using Queries;
 using TestTools.Doubles;
 
@@ -14,7 +15,8 @@ public class TransactionOrchestratorSpecs
     public void Transfer_adds_the_balance_to_the_debit_account(
         AccountId debitAccountId,
         AccountId creditAccountId,
-        [Frozen] Accounts __,
+        [Frozen(Matching.ImplementedInterfaces)] Accounts __,
+        [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
         TransactionOrchestrator sut,
         AccountOrchestrator accountOrchestrator,
@@ -41,8 +43,8 @@ public class TransactionOrchestratorSpecs
 
     [Theory, AutoMoqData]
     public void Transfer_subtracts_the_balance_from_the_credit_account(
-        [Frozen] Accounts __,
-        [Frozen] Transactions ___,
+        [Frozen(Matching.ImplementedInterfaces)] Accounts __,
+        [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
         TransactionOrchestrator sut,
         AccountOrchestrator accountService,
@@ -71,7 +73,7 @@ public class TransactionOrchestratorSpecs
 
     [Theory, AutoMoqData]
     public void Drafts_a_new_transaction(
-        [Frozen] Transactions _,
+        [Frozen(Matching.ImplementedInterfaces)] Transactions _,
         TransactionOrchestrator sut,
         TransactionQueries queries,
         DateTime now,
@@ -98,5 +100,4 @@ public class TransactionOrchestratorSpecs
             now
         ));
     }
-
 }

@@ -5,9 +5,9 @@ namespace Queries;
 
 public class AccountQueries
 {
-    readonly Accounts _accounts;
+    readonly IAccounts _accounts;
     
-    public AccountQueries(Accounts accounts)
+    public AccountQueries(IAccounts accounts)
         => _accounts = accounts;
     
     public BalanceViewModel? GetBalanceForAccount(AccountId accountId)

@@ -7,9 +7,9 @@ namespace Services;
 
 public class TransferService : ITransferService
 {
-    readonly Accounts _accounts;
+    readonly IAccounts _accounts;
 
-    public TransferService(Accounts accounts)
+    public TransferService(IAccounts accounts)
         => _accounts = accounts;
 
     public void Transfer(

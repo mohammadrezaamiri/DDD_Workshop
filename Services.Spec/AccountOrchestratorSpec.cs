@@ -2,6 +2,7 @@ using AutoFixture.Xunit2;
 using Domain.Account;
 using Domain.SharedValueObject;
 using FluentAssertions;
+using Persistence;
 using Queries;
 using TestTools.Doubles;
 
@@ -11,7 +12,7 @@ public class AccountOrchestratorSpec
 {
     [Theory, AutoMoqData]
     public void Opens_a_new_account(AccountId accountId,
-        [Frozen] Accounts _,
+        [Frozen(Matching.ImplementedInterfaces)] Accounts _,
         AccountQueries queries,
         AccountOrchestrator accountOrchestrator
     )

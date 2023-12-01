@@ -5,8 +5,8 @@ namespace Services;
 
 public class AccountOrchestrator
 {
-    private readonly Accounts _accounts;
-    public AccountOrchestrator(Accounts accounts)
+    private readonly IAccounts _accounts;
+    public AccountOrchestrator(IAccounts accounts)
         => _accounts = accounts;
 
     public void OpenAccount(

@@ -1,8 +1,9 @@
 using Domain.Account;
+using Services;
 
-namespace Services;
+namespace Persistence;
 
-public class Accounts
+public class Accounts: IAccounts
 {
     private readonly List<Account> _records = new();
     public Account? FindById(AccountId id)
