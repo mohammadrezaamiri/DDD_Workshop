@@ -1,61 +1,104 @@
 using AutoFixture;
 using AutoFixture.Xunit2;
 using FluentAssertions;
-namespace DomainTests;
+using Services.Domain.Exceptions;
+using Services.Domain.SharedValueObject;
 
+namespace DomainTests;
 
 public class MoneySpecs
 {
-    static T A<T>(Func<T, T>? customization = null)
-    {
-        var t = new Fixture().Create<T>();
-        if (null != customization)
-            t = customization(t);
-        return t;
-    }
-
-    Money aValidMoney() => A<Money>(with => new Money(Math.Abs(with.Value)));
-
-    // class MoneyDto
-    // {
-    //     public decimal Amount { get; set; }
-    //     public string Currency1 { get; set; }
-    //     public string Currency2 { get; set; }
-    //     public string Currency3 { get; set; }
-    //     public string Currency4 { get; set; }
-    //     public string Currency5 { get; set; }
-    //     public string Currency6 { get; set; }
-    //     public string Currency7 { get; set; }
-    //     public string Currency8 { get; set; }
-    // }
-
-    void x()
-    {
-        // var money = A<MoneyDto>.But(with => new MoneyDto
-        // {
-        //     Amount = Math.Abs(with.Amount)
-        // });
-
-    }
-
     [Theory, AutoData]
-    public void Money_cannot_be_negative(decimal amount)
-    => new Action(() =>               //Arrange
-       new Money(-Math.Abs(amount))   //Act
-       ).Should().Throw<Exception>(); //Assert
+    public void Money_cannot_be_negative(decimal amount)        
+        => new Action(() =>
+            new Money(-Math.Abs(amount))
+        ).Should().ThrowExactly<MoneyCanNotBeNegativeException>();
 
     [Theory, AutoData]
     public void Supports_subtraction(uint five)
     {
-        //Arrange
-        var smallerNumber = aValidMoney();
-        var biggerNumber = new Money(smallerNumber.Value + five);
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
 
-        //Act
-        (biggerNumber - smallerNumber)
-
-        //Assert
-        .Value.Should().Be(five);
+        (biggerMoney - smallerMoney)
+            .Value.Should().Be(five);
     }
 
+    [Fact]
+    public void Supports_addition()
+    {
+        var left = aValidMoney();
+        var right = aValidMoney();
+
+        (left + right)
+            .Value.Should().Be(left.Value + right.Value);
+    }
+
+    [Theory, AutoData]
+    public void subtraction_throw_exception_when_result_is_negative(uint five)
+    {
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
+
+        var actual = () => smallerMoney - biggerMoney;
+
+        actual.Should().ThrowExactly<MoneyCanNotBeNegativeException>();
+    }
+
+    [Theory, AutoData]
+    public void Supports_less_than(uint five)
+    {
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
+
+        (smallerMoney < biggerMoney).Should().BeTrue();
+    }  
+    
+    [Theory, AutoData]
+    public void Supports_greater_than(uint five)
+    {
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
+
+        (biggerMoney > smallerMoney).Should().BeTrue();
+    }
+
+    [Fact]
+    public void Supports_greater_than_or_equal_when_is_equal()
+    {
+        var left = aValidMoney();
+        var right = left;
+
+        (left >= right).Should().BeTrue();
+    }
+    
+    [Theory, AutoData]
+    public void Supports_greater_than_or_equal_when_is_greater(uint five)
+    {
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
+
+        (biggerMoney >= smallerMoney).Should().BeTrue();
+    }  
+    
+    [Fact]
+    public void Supports_less_than_or_equal_when_is_equal()
+    {
+        var left = aValidMoney();
+        var right = left;
+
+        (left <= right).Should().BeTrue();
+    }
+    
+    [Theory, AutoData]
+    public void Supports_less_than_or_equal_when_is_less(uint five)
+    {
+        var smallerMoney = aValidMoney();
+        var biggerMoney = new Money(smallerMoney.Value + five);
+
+        (smallerMoney <= biggerMoney).Should().BeTrue();
+    }
+
+    Money aValidMoney() =>
+        Build.A<Money>(with => new Money(Math.Abs(with.Value)));
 }

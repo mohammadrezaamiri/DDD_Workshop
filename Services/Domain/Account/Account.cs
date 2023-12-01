@@ -1,3 +1,7 @@
+using Services.Domain.SharedValueObject;
+
+namespace Services.Domain.Account;
+
 public class Account
 {
     public Account(string id, Money initialBalance)

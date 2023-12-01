@@ -1,4 +1,7 @@
-﻿namespace Services;
+﻿using Services.Domain;
+using Services.Domain.Transaction;
+
+namespace Services;
 
 public class TransactionOrchestrator
 {

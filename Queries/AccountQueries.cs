@@ -1,8 +1,12 @@
+using Services;
+
+namespace Queries;
+
 public class AccountQueries
 {
     Accounts accounts;
     public AccountQueries(Accounts accounts)
-    =>this.accounts = accounts;
+        =>this.accounts = accounts;
     public BalanceViewModel? GetBalanceForAccount(string accountId)
     {
         var theAccount= accounts.FindById(accountId);

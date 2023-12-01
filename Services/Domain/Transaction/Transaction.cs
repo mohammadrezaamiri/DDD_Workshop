@@ -1,3 +1,6 @@
+using Services.Domain.SharedValueObject;
+
+namespace Services.Domain.Transaction;
 
 public enum TransferStatus
 {
@@ -40,14 +43,14 @@ public class Transaction
         string creditAccountId,
         string debitAccountId,
         Money amount)
-    => new Transaction(
-        id,
-        date,
-        description,
-        creditAccountId,
-        debitAccountId,
-        amount
-    );
+        => new Transaction(
+            id,
+            date,
+            description,
+            creditAccountId,
+            debitAccountId,
+            amount
+        );
 
     public void Commit(ITransferService transferService)
     {

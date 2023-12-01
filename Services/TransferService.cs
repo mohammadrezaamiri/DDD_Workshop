@@ -1,3 +1,10 @@
+using Services.Domain;
+using Services.Domain.Account;
+using Services.Domain.Exceptions;
+using Services.Domain.SharedValueObject;
+
+namespace Services;
+
 public class TransferService : ITransferService
 {
     Accounts accounts;
@@ -18,7 +25,8 @@ public class TransferService : ITransferService
             accounts.Add(debitAccount);
         }
 
-        if(creditAccount is null) throw new InvalidOperationException($"Credit account with the id '{creditAccountId}' not found.");
+        if(creditAccount is null) 
+            throw new CreditAccountNotFoundException();
         // if(debitAccount is null) throw new InvalidOperationException($"Debit account with the id '{debitAccountId}' not found.");
 
         creditAccount.Credit(amount);
@@ -26,7 +34,5 @@ public class TransferService : ITransferService
 
         accounts.Update(creditAccount);
         accounts.Update(debitAccount);
-
-
     }
 }

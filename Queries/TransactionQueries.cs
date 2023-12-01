@@ -1,3 +1,8 @@
+using Services;
+using Services.Domain.Transaction;
+
+namespace Queries;
+
 public record TransferDraftViewModel(
     string creditAccountId,
     string debitAccountId,
@@ -13,13 +18,13 @@ public class TransactionQueries
         this.transactions = transactions;
     }
     public IEnumerable<TransferDraftViewModel> AllDrafts()
-    => transactions.All()
-        .Where(t => t.Status == TransferStatus.Draft)
-        .Select(t => new TransferDraftViewModel(
-            t.CreditAccountId,
-            t.DebitAccountId,
-            t.Amount.Value,
-            t.Date
-        ));
+        => transactions.All()
+            .Where(t => t.Status == TransferStatus.Draft)
+            .Select(t => new TransferDraftViewModel(
+                t.CreditAccountId,
+                t.DebitAccountId,
+                t.Amount.Value,
+                t.Date
+            ));
 
 }

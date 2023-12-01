@@ -1,5 +1,8 @@
 using AutoFixture.Xunit2;
 using FluentAssertions;
+using Queries;
+using Services.Spec.Doubles;
+
 namespace Services.Spec;
 
 public class TransactionOrchestratorSpecs
