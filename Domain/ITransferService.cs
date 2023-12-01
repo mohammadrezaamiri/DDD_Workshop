@@ -1,7 +1,7 @@
-using Services.Domain.Account;
-using Services.Domain.SharedValueObject;
+using Domain.Account;
+using Domain.SharedValueObject;
 
-namespace Services.Domain;
+namespace Domain;
 
 public interface ITransferService
 {

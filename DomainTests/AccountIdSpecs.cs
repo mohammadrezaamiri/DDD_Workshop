@@ -1,6 +1,6 @@
+using Domain.Account;
+using Domain.Exceptions;
 using FluentAssertions;
-using Services.Domain.Account;
-using Services.Domain.Exceptions;
 
 namespace DomainTests;
 

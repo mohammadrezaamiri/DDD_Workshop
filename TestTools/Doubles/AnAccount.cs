@@ -1,11 +1,11 @@
-using Services.Domain.Account;
-using Services.Domain.SharedValueObject;
+using Domain.Account;
+using Domain.SharedValueObject;
 
 namespace TestTools.Doubles;
 
 public class AnAccount
 {
-   private AccountId _id = new AccountId(Guid.NewGuid().ToString());
+   private AccountId _id = new (Guid.NewGuid().ToString());
    private Money _balance = 0;
    
    public AnAccount WithId(AccountId id)

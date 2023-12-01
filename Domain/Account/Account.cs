@@ -1,7 +1,7 @@
-using Services.Domain.Exceptions;
-using Services.Domain.SharedValueObject;
+using Domain.Exceptions;
+using Domain.SharedValueObject;
 
-namespace Services.Domain.Account;
+namespace Domain.Account;
 
 public class Account
 {

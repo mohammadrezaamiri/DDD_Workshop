@@ -1,6 +1,6 @@
-using Services.Domain.Exceptions;
+using Domain.Exceptions;
 
-namespace Services.Domain.Transaction;
+namespace Domain.Transaction;
 
 public class TransactionId
 {

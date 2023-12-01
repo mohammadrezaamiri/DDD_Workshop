@@ -1,6 +1,6 @@
-using Services.Domain.Exceptions;
+using Domain.Exceptions;
 
-namespace Services.Domain.SharedValueObject;
+namespace Domain.SharedValueObject;
 
 public class Money
 {

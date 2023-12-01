@@ -1,7 +1,7 @@
-using Services.Domain.Account;
-using Services.Domain.SharedValueObject;
+using Domain.Account;
+using Domain.SharedValueObject;
 
-namespace Services.Domain.Transaction;
+namespace Domain.Transaction;
 
 public enum TransferStatus
 {

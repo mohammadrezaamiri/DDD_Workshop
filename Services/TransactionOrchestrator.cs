@@ -1,8 +1,8 @@
-﻿using Services.Domain;
-using Services.Domain.Account;
-using Services.Domain.Exceptions;
-using Services.Domain.SharedValueObject;
-using Services.Domain.Transaction;
+﻿using Domain;
+using Domain.Account;
+using Domain.Exceptions;
+using Domain.SharedValueObject;
+using Domain.Transaction;
 
 namespace Services;
 

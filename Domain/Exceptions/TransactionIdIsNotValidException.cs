@@ -1,4 +1,4 @@
-namespace Services.Domain.Exceptions;
+namespace Domain.Exceptions;
 
 public class TransactionIdIsNotValidException: Exception
 {

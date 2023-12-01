@@ -1,9 +1,9 @@
 using AutoFixture.Xunit2;
+using Domain.Account;
+using Domain.SharedValueObject;
+using Domain.Transaction;
 using FluentAssertions;
 using Queries;
-using Services.Domain.Account;
-using Services.Domain.SharedValueObject;
-using Services.Domain.Transaction;
 using TestTools.Doubles;
 
 namespace Services.Spec;

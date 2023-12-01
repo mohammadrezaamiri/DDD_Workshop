@@ -1,6 +1,6 @@
-using Services.Domain.Exceptions;
+using Domain.Exceptions;
 
-namespace Services.Domain.Account;
+namespace Domain.Account;
 
 public class AccountId
 {

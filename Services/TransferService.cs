@@ -1,7 +1,7 @@
-using Services.Domain;
-using Services.Domain.Account;
-using Services.Domain.Exceptions;
-using Services.Domain.SharedValueObject;
+using Domain;
+using Domain.Account;
+using Domain.Exceptions;
+using Domain.SharedValueObject;
 
 namespace Services;
 
