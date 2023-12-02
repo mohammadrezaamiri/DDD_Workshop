@@ -1,9 +1,8 @@
-using System.Net.Http.Headers;
 using Domain.Exceptions;
 
 namespace Domain.SharedValueObject;
 
-public class Money
+public class Money : IEquatable<Money>
 {
     public decimal Value { get; }
 
@@ -35,11 +34,24 @@ public class Money
     public static bool operator >=(Money left, Money right)
         => left.Value >= right.Value;
 
-    public static bool operator ==(Money left, Money right)
-        => left.Value == right.Value;
+    public static bool operator ==(Money? left, Money? right)
+    {
+        if (ReferenceEquals(left, right))
+            return true;
+        if (ReferenceEquals(left, null))
+            return false;
+        return !ReferenceEquals(right, null) && left.Equals(right);
+    }
 
     public static bool operator !=(Money left, Money right)
         => !(left == right);
+
+    public bool Equals(Money? other)
+    {
+        if (ReferenceEquals(other, null))
+            return false;
+        return ReferenceEquals(this, other) || Value.Equals(other.Value);
+    }
 
     public override bool Equals(object? obj)
     {
