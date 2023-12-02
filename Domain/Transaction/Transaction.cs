@@ -11,8 +11,7 @@ public enum TransferStatus
 public class Transaction
 {
     public TransactionId Id { get; }
-    public TransactionParties Parties { get; set; }
-    public Money Amount { get; }
+    public TransferRequest Request { get; }
     public DateTime Date { get; }
     public string? Description { get; private set; }
     public TransferStatus Status { get; private set; } = TransferStatus.Draft;
@@ -20,21 +19,18 @@ public class Transaction
     protected Transaction(
         TransactionId id,
         DateTime date,
-        TransactionParties parties,
-        Money amount)
+        TransferRequest request)
     {
         Id = id;
         Date = date;
-        Parties = parties; 
-        Amount = amount;
+        Request = request;
     }
 
     public static Transaction Draft(
         TransactionId id,
         DateTime date,
-        TransactionParties parties,
-        Money amount)
-        => new (id, date, parties, amount);
+        TransferRequest request)
+        => new (id, date, request);
 
     public Transaction WithDraftDescription(string description)
     {
@@ -44,7 +40,7 @@ public class Transaction
     
     public void Commit(ITransferService transferService)
     {
-        transferService.Transfer(Parties, Amount);
+        transferService.Transfer(Request);
         Status = TransferStatus.Commit;
     }
 }

@@ -13,23 +13,22 @@ public class TransferService : ITransferService
         => _accounts = accounts;
 
     public void Transfer(
-        TransactionParties parties,
-        Money amount)
+        TransferRequest request)
     {
-        var creditAccount = _accounts.FindById(parties.CreditAccountId);
-        var debitAccount = _accounts.FindById(parties.DebitAccountId);
+        var creditAccount = _accounts.FindById(request.Parties.CreditAccountId);
+        var debitAccount = _accounts.FindById(request.Parties.DebitAccountId);
 
         if (debitAccount is null)
         {
-            debitAccount = new Account(parties.DebitAccountId, 0);
+            debitAccount = new Account(request.Parties.DebitAccountId, 0);
             _accounts.Add(debitAccount);
         }
 
         if(creditAccount is null) 
             throw new CreditAccountNotFoundException();
 
-        creditAccount.Credit(amount);
-        debitAccount.Debit(amount);
+        creditAccount.Credit(request.Amount);
+        debitAccount.Debit(request.Amount);
 
         _accounts.Update(creditAccount);
         _accounts.Update(debitAccount);

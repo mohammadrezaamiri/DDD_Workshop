@@ -10,7 +10,7 @@ public class AccountQueries
     public AccountQueries(IAccounts accounts)
         => _accounts = accounts;
     
-    public BalanceViewModel? GetBalanceForAccount(AccountId accountId)
+    public BalanceViewModel? GetBalanceForAccount(string accountId)
     {
         var theAccount= _accounts.FindById(accountId);
         return theAccount is null 

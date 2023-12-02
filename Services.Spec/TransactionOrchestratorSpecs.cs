@@ -12,7 +12,8 @@ public class TransactionOrchestratorSpecs
 {
     [Theory, AutoMoqData]
     public void Transfer_adds_the_balance_to_the_debit_account(
-        TransactionParties parties,
+        string creditAccountId,
+        string debitAccountId,
         [Frozen(Matching.ImplementedInterfaces)] Accounts __,
         [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
@@ -26,15 +27,16 @@ public class TransactionOrchestratorSpecs
     )
     {
         accountOrchestrator.OpenAccount(
-            parties.CreditAccountId, amount + new Money(20000));
+            creditAccountId,
+            (amount + new Money(20000)).Value);
 
-        sut.DraftTransfer(transactionId,
-            parties,
-            amount, now, description);
+        sut.DraftTransfer(transactionId.Value,
+            creditAccountId,debitAccountId,
+            amount.Value, now, description);
 
-        sut.CommitTransfer(transactionId);
+        sut.CommitTransfer(transactionId.Value);
 
-        queries.GetBalanceForAccount(parties.DebitAccountId).Should()
+        queries.GetBalanceForAccount(debitAccountId).Should()
             .BeEquivalentTo(new { Balance = amount.Value });
     }
 
@@ -51,22 +53,23 @@ public class TransactionOrchestratorSpecs
         Money amount,
         DateTime now,
         string description,
-        TransactionParties parties
+        string creditAccountId,
+        string debitAccountId
         )
     {
         var creditAccount = Build.AnAccount
-            .WithId(parties.CreditAccountId)
+            .WithId(creditAccountId)
             .WithBalance(amount + new Money(25000)).Please();
 
-        accountService.OpenAccount(creditAccount.Id, creditAccount.Balance.Value);
+        accountService.OpenAccount(creditAccountId, creditAccount.Balance.Value);
 
         sut.DraftTransfer(transactionId,
-            parties,
-            amount, now, description);
+            creditAccountId,debitAccountId,
+            amount.Value, now, description);
 
         sut.CommitTransfer(transactionId);
 
-        queries.GetBalanceForAccount(creditAccount.Id).Should()
+        queries.GetBalanceForAccount(creditAccountId).Should()
             .BeEquivalentTo(new { Balance = 25000 });
     }
 
@@ -77,20 +80,22 @@ public class TransactionOrchestratorSpecs
         TransactionQueries queries,
         DateTime now,
         string description,
-        TransactionParties parties,
-        Money amount
+        Money amount,
+        string creditAccountId,
+        string debitAccountId
     )
     {
         sut.DraftTransfer(
             "transaction Id", 
-            parties,
-            amount, 
+            creditAccountId,
+            debitAccountId,
+            amount.Value, 
             now, 
             description);
 
         queries.AllDrafts().Should().Contain(new TransferDraftViewModel(
-            parties.CreditAccountId.Value,
-            parties.DebitAccountId.Value,
+            creditAccountId,
+            debitAccountId,
             amount.Value,
             now
         ));

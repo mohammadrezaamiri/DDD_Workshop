@@ -2,7 +2,7 @@ using Domain.Exceptions;
 
 namespace Domain.Account;
 
-public class AccountId
+public class AccountId: ValueObject
 {
     public AccountId(string id)
     {
@@ -16,4 +16,9 @@ public class AccountId
     
     public static implicit operator AccountId(string id)
         => new(id);
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }

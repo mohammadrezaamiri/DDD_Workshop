@@ -19,17 +19,19 @@ public class TransactionOrchestrator
 
     public void DraftTransfer(
         TransactionId transactionId, 
-        TransactionParties parties, 
-        Money amount, 
+        string creditAccountId,
+        string debitAccountId,
+        decimal amount,
         DateTime transactionDate, 
         string description)
     {
+        var parties = new TransactionParties(creditAccountId, debitAccountId);
+        var request = new TransferRequest(parties, amount);
         _transactions.Add(
             Transaction.Draft(
                 transactionId, 
                 transactionDate, 
-                parties,
-                amount)
+                request)
                 .WithDraftDescription(description));
         
     }

@@ -2,18 +2,23 @@ using Domain.Exceptions;
 
 namespace Domain.Transaction;
 
-public class TransactionId
+public class TransactionId: ValueObject
 {
-    public TransactionId(string id)
+    public TransactionId(string value)
     {
-        if (string.IsNullOrWhiteSpace(id))
+        if (string.IsNullOrWhiteSpace(value))
             throw new TransactionIdIsNotValidException();
         
-        Id = id;
+        Value = value;
     }
 
-    public string Id { get; }
+    public string Value { get; }
     
     public static implicit operator TransactionId(string id)
         => new(id);
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }

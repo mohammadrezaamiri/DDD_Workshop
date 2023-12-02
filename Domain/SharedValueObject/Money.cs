@@ -2,7 +2,7 @@ using Domain.Exceptions;
 
 namespace Domain.SharedValueObject;
 
-public class Money : IEquatable<Money>
+public class Money : ValueObject
 {
     public decimal Value { get; }
 
@@ -34,31 +34,8 @@ public class Money : IEquatable<Money>
     public static bool operator >=(Money left, Money right)
         => left.Value >= right.Value;
 
-    public static bool operator ==(Money? left, Money? right)
+    protected override IEnumerable<object> GetEqualityComponents()
     {
-        if (ReferenceEquals(left, right))
-            return true;
-        if (ReferenceEquals(left, null))
-            return false;
-        return !ReferenceEquals(right, null) && left.Equals(right);
+        yield return Value;
     }
-
-    public static bool operator !=(Money left, Money right)
-        => !(left == right);
-
-    public bool Equals(Money? other)
-    {
-        if (ReferenceEquals(other, null))
-            return false;
-        return ReferenceEquals(this, other) || Value.Equals(other.Value);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is not Money money) return false;
-        return money.Value == Value;
-    }
-
-    public override int GetHashCode()
-        => Value.GetHashCode();
 }

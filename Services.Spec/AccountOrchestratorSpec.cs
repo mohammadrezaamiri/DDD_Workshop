@@ -11,19 +11,16 @@ namespace Services.Spec;
 public class AccountOrchestratorSpec
 {
     [Theory, AutoMoqData]
-    public void Opens_a_new_account(AccountId accountId,
+    public void Opens_a_new_account(
+        string accountId,
         [Frozen(Matching.ImplementedInterfaces)] Accounts _,
         AccountQueries queries,
         AccountOrchestrator accountOrchestrator
     )
     {
-        var balance = AValidMoney();
-        accountOrchestrator.OpenAccount(accountId, balance);
+        var balance = Build.ValidMoney();
+        accountOrchestrator.OpenAccount(accountId, balance.Value);
         queries.GetBalanceForAccount(accountId)
             .Should().BeEquivalentTo(new { Balance = balance.Value });
     }
-
-    private static Money AValidMoney()
-        => Build.A<Money>(with => 
-            new Money(Math.Abs(with.Value)));
 }
