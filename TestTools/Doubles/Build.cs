@@ -1,4 +1,5 @@
 using AutoFixture;
+using Domain.SharedValueObject;
 
 namespace TestTools.Doubles;
 
@@ -11,4 +12,7 @@ public static class Build
         var t = new Fixture().Create<T>();
         return customization == null ? t : customization(t);
     }
+    
+    public static Money ValidMoney() =>
+        A<Money>(with => new Money(Math.Abs(with.Value)));
 }

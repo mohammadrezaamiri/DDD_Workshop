@@ -17,7 +17,7 @@ public class MoneySpecs
     [Theory, AutoData]
     public void Supports_subtraction(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         (biggerMoney - smallerMoney)
@@ -27,8 +27,8 @@ public class MoneySpecs
     [Fact]
     public void Supports_addition()
     {
-        var left = aValidMoney();
-        var right = aValidMoney();
+        var left = Build.ValidMoney();
+        var right = Build.ValidMoney();
 
         (left + right)
             .Value.Should().Be(left.Value + right.Value);
@@ -37,7 +37,7 @@ public class MoneySpecs
     [Theory, AutoData]
     public void subtraction_throw_exception_when_result_is_negative(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         var actual = () => smallerMoney - biggerMoney;
@@ -48,7 +48,7 @@ public class MoneySpecs
     [Theory, AutoData]
     public void Supports_less_than(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         (smallerMoney < biggerMoney).Should().BeTrue();
@@ -57,7 +57,7 @@ public class MoneySpecs
     [Theory, AutoData]
     public void Supports_greater_than(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         (biggerMoney > smallerMoney).Should().BeTrue();
@@ -66,7 +66,7 @@ public class MoneySpecs
     [Fact]
     public void Supports_greater_than_or_equal_when_is_equal()
     {
-        var left = aValidMoney();
+        var left = Build.ValidMoney();
         var right = left;
 
         (left >= right).Should().BeTrue();
@@ -75,7 +75,7 @@ public class MoneySpecs
     [Theory, AutoData]
     public void Supports_greater_than_or_equal_when_is_greater(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         (biggerMoney >= smallerMoney).Should().BeTrue();
@@ -84,7 +84,7 @@ public class MoneySpecs
     [Fact]
     public void Supports_less_than_or_equal_when_is_equal()
     {
-        var left = aValidMoney();
+        var left = Build.ValidMoney();
         var right = left;
 
         (left <= right).Should().BeTrue();
@@ -93,12 +93,50 @@ public class MoneySpecs
     [Theory, AutoData]
     public void Supports_less_than_or_equal_when_is_less(uint five)
     {
-        var smallerMoney = aValidMoney();
+        var smallerMoney = Build.ValidMoney();
         var biggerMoney = new Money(smallerMoney.Value + five);
 
         (smallerMoney <= biggerMoney).Should().BeTrue();
     }
 
-    Money aValidMoney() =>
-        Build.A<Money>(with => new Money(Math.Abs(with.Value)));
+    [Fact]
+    public void Equals_another_object_with_the_same_value()
+    {
+        var theSameAmount = Build.ValidMoney();
+        var left = new Money(theSameAmount.Value);
+        var right = new Money(theSameAmount.Value);
+        
+        left.Equals(right).Should().BeTrue();
+    }
+    
+    [Fact]
+    public void Doesnt_equal_different_object()
+    {
+        var theSameAmount = Build.ValidMoney();
+        var left = new Money(theSameAmount.Value);
+        var right = new MoneySpecs();
+        
+        left.Equals(right).Should().BeFalse();
+    }
+    
+    [Fact]
+    public void Equals_another_object_with_the_same_value_by_compare_equal_operator()
+    {
+        var theSameAmount = Build.ValidMoney();
+        var left = new Money(theSameAmount.Value);
+        var right = new Money(theSameAmount.Value);
+
+        (left == right).Should().BeTrue();
+    }
+    
+    
+    [Fact]
+    public void Not_equals_another_object_with_the_same_value_by_compare_not_equal_operator()
+    {
+        var theSameAmount = Build.ValidMoney();
+        var left = new Money(theSameAmount.Value + 100);
+        var right = new Money(theSameAmount.Value);
+
+        (left != right).Should().BeTrue();
+    }
 }

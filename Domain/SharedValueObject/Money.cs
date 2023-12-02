@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Domain.Exceptions;
 
 namespace Domain.SharedValueObject;
@@ -5,22 +6,23 @@ namespace Domain.SharedValueObject;
 public class Money
 {
     public decimal Value { get; }
+
     public Money(decimal amount)
     {
-        if (amount < 0) 
+        if (amount < 0)
             throw new MoneyCanNotBeNegativeException();
         Value = amount;
     }
 
     public static Money operator -(Money left, Money right)
-        => new (left.Value - right.Value);
+        => new(left.Value - right.Value);
 
     public static Money operator +(Money left, Money right)
-        => new (left.Value + right.Value);
+        => new(left.Value + right.Value);
 
     public static implicit operator Money(decimal amount)
-        => new (amount);
-    
+        => new(amount);
+
     public static bool operator <(Money left, Money right)
         => left.Value < right.Value;
 
@@ -32,4 +34,19 @@ public class Money
 
     public static bool operator >=(Money left, Money right)
         => left.Value >= right.Value;
+
+    public static bool operator ==(Money left, Money right)
+        => left.Value == right.Value;
+
+    public static bool operator !=(Money left, Money right)
+        => !(left == right);
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Money money) return false;
+        return money.Value == Value;
+    }
+
+    public override int GetHashCode()
+        => Value.GetHashCode();
 }
