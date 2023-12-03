@@ -1,10 +1,10 @@
+using Domain.Account;
 using Domain.Exceptions;
-using Domain.Transaction;
 using FluentAssertions;
 
-namespace DomainTests;
+namespace Domain.Spec;
 
-public class TransactionIdSpecs
+public class AccountIdSpecs
 {
     [Theory]
     [InlineData(null)]
@@ -12,6 +12,6 @@ public class TransactionIdSpecs
     [InlineData(" ")]
     public void id_should_not_be_null_or_white_space(string id)
         => new Action(() =>
-                new TransactionId(id))
-            .Should().ThrowExactly<TransactionIdIsNotValidException>();
+                new AccountId(id))
+            .Should().ThrowExactly<AccountIdIsNotValidException>();
 }

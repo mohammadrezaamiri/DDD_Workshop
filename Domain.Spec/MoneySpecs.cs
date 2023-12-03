@@ -4,7 +4,7 @@ using Domain.SharedValueObject;
 using FluentAssertions;
 using TestTools.Doubles;
 
-namespace DomainTests;
+namespace Domain.Spec;
 
 public class MoneySpecs
 {
