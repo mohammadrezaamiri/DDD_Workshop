@@ -1,7 +1,7 @@
 using Domain.Account;
 using Services;
 
-namespace Persistence;
+namespace Persistence.InMemory;
 
 public class Accounts: IAccounts
 {

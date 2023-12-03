@@ -3,6 +3,7 @@ using Domain.Account;
 using Domain.SharedValueObject;
 using FluentAssertions;
 using Persistence;
+using Persistence.InMemory;
 using Queries;
 using TestTools.Doubles;
 

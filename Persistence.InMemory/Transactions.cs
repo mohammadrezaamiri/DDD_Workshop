@@ -1,11 +1,12 @@
 using Domain.Transaction;
 using Services;
 
-namespace Persistence;
+namespace Persistence.InMemory;
 
 public class Transactions: ITransactions
 {
     private readonly List<Transaction> _records = new();
+    
     public void Add(Transaction transaction)
         => _records.Add(transaction);
 
