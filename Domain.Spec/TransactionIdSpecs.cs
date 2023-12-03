@@ -14,4 +14,17 @@ public class TransactionIdSpecs
         => new Action(() =>
                 new TransactionId(id))
             .Should().ThrowExactly<TransactionIdIsNotValidException>();
+    
+    [Fact]
+    public void equality_should_work_correctly()
+    {
+        var id = Guid.NewGuid().ToString();
+        
+        var left = new TransactionId(id);
+        var right = new TransactionId(id);
+        
+        (left == right).Should().BeTrue();
+        left.Equals(right).Should().BeTrue();
+        left.GetHashCode().Should().Be(right.GetHashCode());
+    }
 }
