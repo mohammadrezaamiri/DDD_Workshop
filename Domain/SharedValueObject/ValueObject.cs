@@ -1,11 +1,12 @@
+namespace Domain.SharedValueObject;
+
 public abstract class ValueObject
 {
-    protected static bool EqualOperator(ValueObject left, ValueObject right)
+    protected static bool EqualOperator(ValueObject? left, ValueObject? right)
     {
         if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
             return false;
         
-
         return ReferenceEquals(left, right) || left!.Equals(right);
     }
 
@@ -13,7 +14,7 @@ public abstract class ValueObject
         => !EqualOperator(left, right);
     
 
-    protected abstract IEnumerable<object> GetEqualityComponents();
+    protected abstract IEnumerable<object?> GetEqualityComponents();
 
     public override bool Equals(object? obj)
     {
@@ -22,7 +23,7 @@ public abstract class ValueObject
 
         var other = (ValueObject)obj;
 
-        return this.GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+        return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
     }
 
     public override int GetHashCode()
@@ -33,8 +34,6 @@ public abstract class ValueObject
     public static bool operator ==(ValueObject one, ValueObject two)
         => EqualOperator(one, two);
     
-
     public static bool operator !=(ValueObject one, ValueObject two)
         => NotEqualOperator(one, two);
-
 }

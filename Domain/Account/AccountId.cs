@@ -1,4 +1,5 @@
 using Domain.Exceptions;
+using Domain.SharedValueObject;
 
 namespace Domain.Account;
 
