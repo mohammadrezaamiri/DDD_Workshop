@@ -1,4 +1,6 @@
+using AutoFixture.Xunit2;
 using Domain.Exceptions;
+using Domain.SharedValueObject;
 using Domain.Transaction;
 using FluentAssertions;
 
@@ -27,4 +29,9 @@ public class TransactionIdSpecs
         left.Equals(right).Should().BeTrue();
         left.GetHashCode().Should().Be(right.GetHashCode());
     }
+    
+    [Theory, AutoData]
+    public void not_equality_should_work_correctly(
+        TransactionId left, TransactionId right)
+        => (left != right).Should().BeTrue();
 }

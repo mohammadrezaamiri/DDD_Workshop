@@ -19,11 +19,11 @@ public class TransactionPartiesSpecs
         new Action(() => new TransactionParties(creditAccountId, debitAccountId))
             .Should().ThrowExactly<PartiesCanNotBeSameException>();
     }
-    
-    
+
+
     [Theory, AutoData]
     public void equality_should_work_correctly(
-        AccountId creditAccountId, AccountId  debitAccountId)
+        AccountId creditAccountId, AccountId debitAccountId)
     {
         var left = new TransactionParties(creditAccountId, debitAccountId);
         var right = new TransactionParties(creditAccountId, debitAccountId);
@@ -32,4 +32,9 @@ public class TransactionPartiesSpecs
         left.Equals(right).Should().BeTrue();
         left.GetHashCode().Should().Be(right.GetHashCode());
     }
+
+    [Theory, AutoData]
+    public void not_equality_should_work_correctly(
+        TransactionParties left, TransactionParties right)
+        => (left != right).Should().BeTrue();
 }

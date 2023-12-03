@@ -1,5 +1,7 @@
+using AutoFixture.Xunit2;
 using Domain.Account;
 using Domain.Exceptions;
+using Domain.Transaction;
 using FluentAssertions;
 
 namespace Domain.Spec;
@@ -27,4 +29,9 @@ public class AccountIdSpecs
         left.Equals(right).Should().BeTrue();
         left.GetHashCode().Should().Be(right.GetHashCode());
     }
+    
+    [Theory, AutoData]
+    public void not_equality_should_work_correctly(
+        AccountId left, AccountId right)
+        => (left != right).Should().BeTrue();
 }
