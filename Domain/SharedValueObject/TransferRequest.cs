@@ -13,7 +13,6 @@ public class TransferRequest: ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Amount;
-        yield return Parties.CreditAccountId;
-        yield return Parties.DebitAccountId;
+        yield return Parties;
     }
 }

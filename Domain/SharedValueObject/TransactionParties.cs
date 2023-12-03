@@ -3,7 +3,7 @@ using Domain.Exceptions;
 
 namespace Domain.SharedValueObject;
 
-public class TransactionParties
+public class TransactionParties: ValueObject
 {
     public AccountId CreditAccountId { get; }
     public AccountId DebitAccountId { get; }
@@ -17,5 +17,11 @@ public class TransactionParties
         
         CreditAccountId = creditAccountId;
         DebitAccountId = debitAccountId;
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return CreditAccountId;
+        yield return DebitAccountId;
     }
 }
