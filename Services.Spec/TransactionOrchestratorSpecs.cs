@@ -2,7 +2,6 @@ using AutoFixture.Xunit2;
 using Domain.SharedValueObject;
 using Domain.Transaction;
 using FluentAssertions;
-using Persistence;
 using Persistence.InMemory;
 using Queries;
 using TestTools.Doubles;

@@ -1,5 +1,4 @@
 using Services;
-using Domain.Account;
 
 namespace Queries;
 
