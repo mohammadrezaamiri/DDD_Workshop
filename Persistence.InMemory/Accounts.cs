@@ -1,5 +1,5 @@
 using Domain.Account;
-using Services;
+using Services.AccountStories;
 
 namespace Persistence.InMemory;
 

@@ -1,6 +1,5 @@
 using AutoFixture.Xunit2;
 using Domain.Exceptions;
-using Domain.SharedValueObject;
 using Domain.Transaction;
 using FluentAssertions;
 

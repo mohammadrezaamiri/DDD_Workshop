@@ -1,5 +1,5 @@
 using Domain.Transaction;
-using Services;
+using Services.TransactionStories;
 
 namespace Queries;
 

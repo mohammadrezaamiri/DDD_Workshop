@@ -1,6 +1,6 @@
 using Domain.Transaction;
 
-namespace Services;
+namespace Services.TransactionStories;
 
 public interface ITransactions
 {

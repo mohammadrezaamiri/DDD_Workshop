@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.AccountStories.OpenAccount;
 
 namespace Presentation.Controllers;
 
@@ -7,19 +7,11 @@ namespace Presentation.Controllers;
 [Route("[controller]")]
 public class AccountsController : ControllerBase
 {
-    private readonly AccountOrchestrator _accountOrchestration;
+    private readonly IDispatcher _dispatcher;
 
-    public AccountsController(AccountOrchestrator accountOrchestration)
-    {
-        _accountOrchestration = accountOrchestration;
-    }
+    public AccountsController(IDispatcher dispatcher)
+        => _dispatcher = dispatcher;
 
-    [HttpPost]
-    public void OpenAccount(OpenAccountDto dto)
-    {
-        var (accountId, initialBalance) = dto;
-        _accountOrchestration.OpenAccount(accountId, initialBalance);
-    }
+    [HttpPost] public void OpenAccount(OpenAccountCommand command)
+        => _dispatcher.Dispatch(command);
 }
-
-public record OpenAccountDto(string AccountId, decimal InitialBalance);

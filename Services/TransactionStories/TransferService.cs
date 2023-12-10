@@ -2,8 +2,9 @@ using Domain;
 using Domain.Account;
 using Domain.Exceptions;
 using Domain.SharedValueObject;
+using Services.AccountStories;
 
-namespace Services;
+namespace Services.TransactionStories;
 
 public class TransferService : ITransferService
 {

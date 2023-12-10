@@ -1,9 +1,12 @@
 using AutoFixture.Xunit2;
 using Domain.SharedValueObject;
-using Domain.Transaction;
 using FluentAssertions;
 using Persistence.InMemory;
 using Queries;
+using Services.AccountStories.OpenAccount;
+using Services.TransactionStories;
+using Services.TransactionStories.CommitTransfer;
+using Services.TransactionStories.DraftTransfer;
 using TestTools.Doubles;
 
 namespace Services.Spec;
@@ -17,27 +20,22 @@ public class TransactionOrchestratorSpecs
         [Frozen(Matching.ImplementedInterfaces)] Accounts __,
         [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
-        TransactionOrchestrator sut,
-        AccountOrchestrator accountOrchestrator,
-        AccountQueries queries,
-        TransactionId transactionId,
-        Money amount,
-        DateTime now,
-        string description
-    )
+        DraftTransferCommand draftCommand,
+        DraftTransferCommandHandler draftSut,
+        CommitTransferCommandHandler commitSut,
+        OpenAccountCommandHandler accountOrchestrator,
+        AccountQueries queries)
     {
-        accountOrchestrator.OpenAccount(
-            creditAccountId,
-            (amount + new Money(20000)).Value);
+        accountOrchestrator.Handle(new OpenAccountCommand(
+                creditAccountId,
+                (draftCommand.Amount + new Money(20000)).Value));
 
-        sut.DraftTransfer(transactionId.Value,
-            creditAccountId,debitAccountId,
-            amount.Value, now, description);
+        draftSut.Handle(draftCommand);
 
-        sut.CommitTransfer(transactionId.Value);
+        commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId));
 
         queries.GetBalanceForAccount(debitAccountId).Should()
-            .BeEquivalentTo(new { Balance = amount.Value });
+            .BeEquivalentTo(new { Balance = draftCommand.Amount });
     }
 
 
@@ -46,58 +44,43 @@ public class TransactionOrchestratorSpecs
         [Frozen(Matching.ImplementedInterfaces)] Accounts __,
         [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
-        TransactionOrchestrator sut,
-        AccountOrchestrator accountService,
-        AccountQueries queries,
-        TransactionId transactionId,
-        Money amount,
-        DateTime now,
-        string description,
-        string creditAccountId,
-        string debitAccountId
-        )
+        DraftTransferCommandHandler draftSut,
+        CommitTransferCommandHandler commitSut,
+        OpenAccountCommandHandler accountService,
+        DraftTransferCommand draftCommand,
+        AccountQueries queries)
     {
         var creditAccount = Build.AnAccount
-            .WithId(creditAccountId)
-            .WithBalance(amount + new Money(25000)).Please();
+            .WithId(draftCommand.CreditAccountId)
+            .WithBalance(draftCommand.Amount + new Money(25000)).Please();
 
-        accountService.OpenAccount(creditAccountId, creditAccount.Balance.Value);
+        accountService.Handle(
+            new OpenAccountCommand(
+                draftCommand.CreditAccountId, creditAccount.Balance.Value));
 
-        sut.DraftTransfer(transactionId,
-            creditAccountId,debitAccountId,
-            amount.Value, now, description);
+        draftSut.Handle(draftCommand);
 
-        sut.CommitTransfer(transactionId);
+        commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId));
 
-        queries.GetBalanceForAccount(creditAccountId).Should()
+        queries.GetBalanceForAccount(draftCommand.CreditAccountId).Should()
             .BeEquivalentTo(new { Balance = 25000 });
     }
 
     [Theory, AutoMoqData]
     public void Drafts_a_new_transaction(
         [Frozen(Matching.ImplementedInterfaces)] Transactions _,
-        TransactionOrchestrator sut,
+        DraftTransferCommandHandler sut,
         TransactionQueries queries,
-        DateTime now,
-        string description,
-        Money amount,
-        string creditAccountId,
-        string debitAccountId
+        DraftTransferCommand command
     )
     {
-        sut.DraftTransfer(
-            "transaction Id", 
-            creditAccountId,
-            debitAccountId,
-            amount.Value, 
-            now, 
-            description);
+        sut.Handle(command);
 
         queries.AllDrafts().Should().Contain(new TransferDraftViewModel(
-            creditAccountId,
-            debitAccountId,
-            amount.Value,
-            now
+            command.CreditAccountId,
+            command.DebitAccountId,
+            command.Amount,
+            command.TransactionDate
         ));
     }
 }

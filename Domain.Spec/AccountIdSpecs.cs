@@ -1,7 +1,6 @@
 using AutoFixture.Xunit2;
 using Domain.Account;
 using Domain.Exceptions;
-using Domain.Transaction;
 using FluentAssertions;
 
 namespace Domain.Spec;

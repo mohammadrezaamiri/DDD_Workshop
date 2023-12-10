@@ -1,6 +1,11 @@
 using Domain;
+using MessageBus;
 using Persistence.InMemory;
-using Services;
+using Services.AccountStories;
+using Services.AccountStories.OpenAccount;
+using Services.TransactionStories;
+using Services.TransactionStories.CommitTransfer;
+using Services.TransactionStories.DraftTransfer;
 
 namespace Presentation;
 
@@ -8,18 +13,26 @@ public static class BusinessServicesRegisterer
 {
     public static void RegisterRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IAccounts, Accounts>();
-        services.AddScoped<ITransactions, Transactions>();
+        services.AddSingleton<IAccounts, Accounts>();
+        services.AddSingleton<ITransactions, Transactions>();
     }
 
-    public static void RegisterOrchestrations(this IServiceCollection services)
+    public static void RegisterHandlers(this IServiceCollection services)
     {
-        services.AddScoped<AccountOrchestrator>();
-        services.AddScoped<TransactionOrchestrator>();
+        services.AddTransient
+            <IMessageHandler<OpenAccountCommand>,
+                OpenAccountCommandHandler>();
+        services.AddTransient
+        <IMessageHandler<DraftTransferCommand>,
+            DraftTransferCommandHandler>();
+        services.AddTransient
+        <IMessageHandler<CommitTransferCommand>,
+            CommitTransferCommandHandler>();
+        services.AddSingleton<IDispatcher, Dispatcher>();
     }
-    
+
     public static void RegisterDomainServices(this IServiceCollection services)
     {
-        services.AddScoped<ITransferService, TransferService>();
+        services.AddTransient<ITransferService, TransferService>();
     }
 }

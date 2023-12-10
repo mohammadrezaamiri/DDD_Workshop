@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MessageBus\MessageBus.csproj" />
       <ProjectReference Include="..\Persistence.InMemory\Persistence.InMemory.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
     </ItemGroup>

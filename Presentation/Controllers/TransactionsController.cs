@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.TransactionStories.CommitTransfer;
+using Services.TransactionStories.DraftTransfer;
 
 namespace Presentation.Controllers;
 
@@ -7,38 +8,16 @@ namespace Presentation.Controllers;
 [Route("[controller]")]
 public class TransactionsController : ControllerBase
 {
-    private readonly TransactionOrchestrator _transactionsOrchestrator;
+    private readonly IDispatcher _dispatcher;
 
-    public TransactionsController(TransactionOrchestrator transactionsOrchestrator)
-    {
-        _transactionsOrchestrator = transactionsOrchestrator;
-    }
+    public TransactionsController(IDispatcher dispatcher)
+        => _dispatcher = dispatcher;
 
     [HttpPost("draft")]
-    public void Draft([FromBody] DraftTransactionDto dto)
-    {
-        _transactionsOrchestrator.DraftTransfer(
-            dto.TransactionId,
-            dto.CreditAccountId,
-            dto.DebitAccountId,
-            dto.Amount,
-            dto.TransactionDate,
-            dto.Description);
-    }
+    public void Draft([FromBody] DraftTransferCommand command)
+        => _dispatcher.Dispatch(command);
 
     [HttpPost("commit")]
-    public void Commit([FromBody] CommitTransactionDto dto)
-    {
-        _transactionsOrchestrator.CommitTransfer(dto.TransactionId);
-    }
+    public void Commit([FromBody] CommitTransferCommand command)
+        => _dispatcher.Dispatch(command);
 }
-
-public record DraftTransactionDto(
-    string TransactionId,
-    string CreditAccountId,
-    string DebitAccountId,
-    decimal Amount,
-    DateTime TransactionDate,
-    string Description);
-
-public record CommitTransactionDto(string TransactionId);

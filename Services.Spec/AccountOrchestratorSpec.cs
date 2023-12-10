@@ -2,6 +2,7 @@ using AutoFixture.Xunit2;
 using FluentAssertions;
 using Persistence.InMemory;
 using Queries;
+using Services.AccountStories.OpenAccount;
 using TestTools.Doubles;
 
 namespace Services.Spec;
@@ -13,11 +14,11 @@ public class AccountOrchestratorSpec
         string accountId,
         [Frozen(Matching.ImplementedInterfaces)] Accounts _,
         AccountQueries queries,
-        AccountOrchestrator accountOrchestrator
+        OpenAccountCommandHandler accountOrchestrator
     )
     {
         var balance = Build.ValidMoney();
-        accountOrchestrator.OpenAccount(accountId, balance.Value);
+        accountOrchestrator.Handle(new OpenAccountCommand(accountId, balance.Value));
         queries.GetBalanceForAccount(accountId)
             .Should().BeEquivalentTo(new { Balance = balance.Value });
     }

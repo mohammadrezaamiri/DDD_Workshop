@@ -1,4 +1,4 @@
-using Services;
+using Services.AccountStories;
 
 namespace Queries;
 

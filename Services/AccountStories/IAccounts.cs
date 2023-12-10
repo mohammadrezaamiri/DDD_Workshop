@@ -1,6 +1,6 @@
 using Domain.Account;
 
-namespace Services;
+namespace Services.AccountStories;
 
 public interface IAccounts
 {
