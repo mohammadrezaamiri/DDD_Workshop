@@ -8,7 +8,7 @@ public enum TransferStatus
     Draft
 }
 
-public class Transaction
+public class Transaction : AggregateRoot
 {
     public TransactionId Id { get; }
     public TransferRequest Request { get; }

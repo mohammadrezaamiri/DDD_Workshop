@@ -1,6 +1,9 @@
 using Domain;
+using Domain.Account.Events;
 using MessageBus;
+using MessageBus.DomainEventsBus;
 using Persistence.InMemory;
+using Services;
 using Services.AccountStories;
 using Services.AccountStories.OpenAccount;
 using Services.TransactionStories;
@@ -29,6 +32,11 @@ public static class BusinessServicesRegisterer
         <ICommandHandler<CommitTransferCommand>,
             CommitTransferCommandHandler>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+        services.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();
+        services.AddTransient
+        <IDomainEventHandler<AccountOpened>, AuditorService>();
+        services.AddTransient
+            <IDomainEventHandler<AccountOpened>, AnotherAuditorService>();
     }
 
     public static void RegisterDomainServices(this IServiceCollection services)
