@@ -1,3 +1,5 @@
+using MessageBus;
+
 namespace Services.TransactionStories.DraftTransfer;
 
 public record DraftTransferCommand(
@@ -6,4 +8,4 @@ public record DraftTransferCommand(
     string DebitAccountId,
     decimal Amount,
     DateTime TransactionDate,
-    string Description);
+    string Description) : ICommand;

@@ -15,6 +15,10 @@ public class Accounts: IAccounts
     }
 
     public void Add(Account account) => _records.Add(account);
-    
+    public List<Account> All()
+    {
+        return _records.ToList();
+    }
+
     public void Clear() => _records.Clear();
 }

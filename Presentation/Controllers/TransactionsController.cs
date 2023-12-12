@@ -1,3 +1,4 @@
+using MessageBus;
 using Microsoft.AspNetCore.Mvc;
 using Services.TransactionStories.CommitTransfer;
 using Services.TransactionStories.DraftTransfer;
@@ -8,9 +9,9 @@ namespace Presentation.Controllers;
 [Route("[controller]")]
 public class TransactionsController : ControllerBase
 {
-    private readonly IDispatcher _dispatcher;
+    private readonly ICommandDispatcher _dispatcher;
 
-    public TransactionsController(IDispatcher dispatcher)
+    public TransactionsController(ICommandDispatcher dispatcher)
         => _dispatcher = dispatcher;
 
     [HttpPost("draft")]

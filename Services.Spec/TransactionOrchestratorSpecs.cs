@@ -1,4 +1,5 @@
 using AutoFixture.Xunit2;
+using Domain.Account;
 using Domain.SharedValueObject;
 using FluentAssertions;
 using Persistence.InMemory;
@@ -15,8 +16,6 @@ public class TransactionOrchestratorSpecs
 {
     [Theory, AutoMoqData]
     public void Transfer_adds_the_balance_to_the_debit_account(
-        string creditAccountId,
-        string debitAccountId,
         [Frozen(Matching.ImplementedInterfaces)] Accounts __,
         [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
@@ -27,14 +26,14 @@ public class TransactionOrchestratorSpecs
         AccountQueries queries)
     {
         accountOrchestrator.Handle(new OpenAccountCommand(
-                creditAccountId,
+                draftCommand.CreditAccountId,
                 (draftCommand.Amount + new Money(20000)).Value));
-
+        
         draftSut.Handle(draftCommand);
 
         commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId));
 
-        queries.GetBalanceForAccount(debitAccountId).Should()
+        queries.GetBalanceForAccount(draftCommand.DebitAccountId).Should()
             .BeEquivalentTo(new { Balance = draftCommand.Amount });
     }
 

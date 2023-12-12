@@ -6,7 +6,7 @@ using MessageBus;
 namespace Services.TransactionStories.CommitTransfer;
 
 public class CommitTransferCommandHandler
-    : IMessageHandler<CommitTransferCommand>
+    : ICommandHandler<CommitTransferCommand>
 {
     private readonly ITransactions _transactions;
     private readonly ITransferService _transferService;

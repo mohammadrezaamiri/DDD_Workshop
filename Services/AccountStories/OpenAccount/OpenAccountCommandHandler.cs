@@ -4,7 +4,7 @@ using MessageBus;
 namespace Services.AccountStories.OpenAccount;
 
 public class OpenAccountCommandHandler 
-    : IMessageHandler<OpenAccountCommand>
+    : ICommandHandler<OpenAccountCommand>
 {
     private readonly IAccounts _accounts;
 

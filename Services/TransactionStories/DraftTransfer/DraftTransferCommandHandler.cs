@@ -5,7 +5,7 @@ using MessageBus;
 namespace Services.TransactionStories.DraftTransfer;
 
 public class DraftTransferCommandHandler 
-    : IMessageHandler<DraftTransferCommand>
+    : ICommandHandler<DraftTransferCommand>
 {
     private readonly ITransactions _transactions;
 

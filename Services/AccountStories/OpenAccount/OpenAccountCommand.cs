@@ -1,3 +1,6 @@
+using MessageBus;
+
 namespace Services.AccountStories.OpenAccount;
 
-public record OpenAccountCommand(string AccountId, decimal InitialBalance);
+public record OpenAccountCommand(string AccountId, decimal InitialBalance)
+    : ICommand;

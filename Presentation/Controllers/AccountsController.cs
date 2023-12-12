@@ -1,4 +1,7 @@
+using Domain.Account;
+using MessageBus;
 using Microsoft.AspNetCore.Mvc;
+using Services.AccountStories;
 using Services.AccountStories.OpenAccount;
 
 namespace Presentation.Controllers;
@@ -7,11 +10,23 @@ namespace Presentation.Controllers;
 [Route("[controller]")]
 public class AccountsController : ControllerBase
 {
-    private readonly IDispatcher _dispatcher;
+    private readonly ICommandDispatcher _commandDispatcher;
+    private readonly IAccounts _accounts;
 
-    public AccountsController(IDispatcher dispatcher)
-        => _dispatcher = dispatcher;
+    public AccountsController(
+        ICommandDispatcher commandDispatcher,
+        IAccounts accounts)
+    {
+        _commandDispatcher = commandDispatcher;
+        _accounts = accounts;
+    }
 
     [HttpPost] public void OpenAccount(OpenAccountCommand command)
-        => _dispatcher.Dispatch(command);
+        => _commandDispatcher.Dispatch(command);
+
+    [HttpGet]
+    public List<Account> GetAll()
+    {
+        return _accounts.All();
+    }
 }

@@ -20,15 +20,15 @@ public static class BusinessServicesRegisterer
     public static void RegisterHandlers(this IServiceCollection services)
     {
         services.AddTransient
-            <IMessageHandler<OpenAccountCommand>,
+            <ICommandHandler<OpenAccountCommand>,
                 OpenAccountCommandHandler>();
         services.AddTransient
-        <IMessageHandler<DraftTransferCommand>,
+        <ICommandHandler<DraftTransferCommand>,
             DraftTransferCommandHandler>();
         services.AddTransient
-        <IMessageHandler<CommitTransferCommand>,
+        <ICommandHandler<CommitTransferCommand>,
             CommitTransferCommandHandler>();
-        services.AddSingleton<IDispatcher, Dispatcher>();
+        services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
     }
 
     public static void RegisterDomainServices(this IServiceCollection services)
