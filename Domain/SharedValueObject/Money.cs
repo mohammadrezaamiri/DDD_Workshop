@@ -4,13 +4,13 @@ namespace Domain.SharedValueObject;
 
 public class Money : ValueObject
 {
-    public decimal Value { get; }
+    public decimal Value { get; private set; }
 
-    public Money(decimal amount)
+    public Money(decimal value)
     {
-        if (amount < 0)
+        if (value < 0)
             throw new MoneyCanNotBeNegativeException();
-        Value = amount;
+        Value = value;
     }
 
     public static Money operator -(Money left, Money right)

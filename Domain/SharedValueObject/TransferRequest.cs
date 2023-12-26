@@ -7,8 +7,8 @@ public class TransferRequest: ValueObject
         Parties = parties;
         Amount = amount;
     }
-    public TransactionParties Parties { get; }
-    public Money Amount { get; }
+    public TransactionParties Parties { get; private set; }
+    public Money Amount { get; private set; }
     
     protected override IEnumerable<object> GetEqualityComponents()
     {

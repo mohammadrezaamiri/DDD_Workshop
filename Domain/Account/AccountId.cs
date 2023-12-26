@@ -5,15 +5,15 @@ namespace Domain.Account;
 
 public class AccountId: ValueObject
 {
-    public AccountId(string id)
+    public AccountId(string value)
     {
-        if (string.IsNullOrWhiteSpace(id))
+        if (string.IsNullOrWhiteSpace(value))
             throw new AccountIdIsNotValidException();
         
-        Value = id;
+        Value = value;
     }
 
-    public string Value { get; }
+    public string Value { get; private set; }
     
     public static implicit operator AccountId(string id)
         => new(id);

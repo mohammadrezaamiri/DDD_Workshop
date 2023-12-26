@@ -15,8 +15,8 @@ public class TransactionId: ValueObject
 
     public string Value { get; }
     
-    public static implicit operator TransactionId(string id)
-        => new(id);
+    public static implicit operator TransactionId(string value)
+        => new(value);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

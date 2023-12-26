@@ -1,23 +1,16 @@
 using Domain.Transaction;
-using Services.TransactionStories;
 
-namespace Queries;
-
-public record TransferDraftViewModel(
-    string CreditAccountId,
-    string DebitAccountId,
-    decimal Balance,
-    DateTime Date);
+namespace Queries.Transactions;
 
 public class TransactionQueries
 {
-    readonly ITransactions _transactions;
+    private readonly EFReadDataContext _dbContext;
     
-    public TransactionQueries(ITransactions transactions)
-        => _transactions = transactions;
+    public TransactionQueries(EFReadDataContext dbContext)
+        => _dbContext = dbContext;
 
     public IEnumerable<TransferDraftViewModel> AllDrafts()
-        => _transactions.All()
+        => _dbContext.Set<Transaction>()
             .Where(t => t.Status == TransferStatus.Draft)
             .Select(t => new TransferDraftViewModel(
                 t.Request.Parties.CreditAccountId.Value,

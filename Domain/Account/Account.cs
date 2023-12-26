@@ -1,4 +1,3 @@
-using Domain.Account.Events;
 using Domain.Exceptions;
 using Domain.SharedValueObject;
 
@@ -6,13 +5,12 @@ namespace Domain.Account;
 
 public class Account : AggregateRoot
 {
-    public Account(AccountId id, Money initialBalance)
+    public Account(AccountId id, Money balance)
     {
         Id = id;
-        Balance = initialBalance;
-        newEvents.Enqueue(new AccountOpened(id.Value, initialBalance.Value));
+        Balance = balance;
     }
-    public AccountId Id { get; }
+    public AccountId Id { get; private set; }
     public Money Balance { get; private set; }
 
     public void Credit(Money amount)

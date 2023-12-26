@@ -2,8 +2,12 @@ using AutoFixture.Xunit2;
 using Domain.Account;
 using Domain.SharedValueObject;
 using FluentAssertions;
-using Persistence.InMemory;
+using Persistence;
+using Persistence.Accounts;
+using Persistence.Transactions;
 using Queries;
+using Queries.Accounts;
+using Queries.Transactions;
 using Services.AccountStories.OpenAccount;
 using Services.TransactionStories;
 using Services.TransactionStories.CommitTransfer;
@@ -16,8 +20,8 @@ public class TransactionOrchestratorSpecs
 {
     [Theory, AutoMoqData]
     public void Transfer_adds_the_balance_to_the_debit_account(
-        [Frozen(Matching.ImplementedInterfaces)] Accounts __,
-        [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
+        [Frozen(Matching.ImplementedInterfaces)] AccountRepository __,
+        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
         DraftTransferCommand draftCommand,
         DraftTransferCommandHandler draftSut,
@@ -40,8 +44,8 @@ public class TransactionOrchestratorSpecs
 
     [Theory, AutoMoqData]
     public void Transfer_subtracts_the_balance_from_the_credit_account(
-        [Frozen(Matching.ImplementedInterfaces)] Accounts __,
-        [Frozen(Matching.ImplementedInterfaces)] Transactions ___,
+        [Frozen(Matching.ImplementedInterfaces)] AccountRepository __,
+        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository ___,
         [Frozen(Matching.ImplementedInterfaces)] TransferService _,
         DraftTransferCommandHandler draftSut,
         CommitTransferCommandHandler commitSut,
@@ -67,7 +71,7 @@ public class TransactionOrchestratorSpecs
 
     [Theory, AutoMoqData]
     public void Drafts_a_new_transaction(
-        [Frozen(Matching.ImplementedInterfaces)] Transactions _,
+        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository _,
         DraftTransferCommandHandler sut,
         TransactionQueries queries,
         DraftTransferCommand command

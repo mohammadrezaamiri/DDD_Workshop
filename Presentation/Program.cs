@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterRepositories();
 builder.Services.RegisterDomainServices();
 builder.Services.RegisterHandlers();
+builder.Services.RegisterQueries();
 
 builder.Services.AddControllers();
 

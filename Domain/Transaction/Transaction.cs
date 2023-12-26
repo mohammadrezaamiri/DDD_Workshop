@@ -10,9 +10,9 @@ public enum TransferStatus
 
 public class Transaction : AggregateRoot
 {
-    public TransactionId Id { get; }
-    public TransferRequest Request { get; }
-    public DateTime Date { get; }
+    public TransactionId Id { get; private set; }
+    public TransferRequest Request { get; private set; }
+    public DateTime Date { get; private set; }
     public string? Description { get; private set; }
     public TransferStatus Status { get; private set; } = TransferStatus.Draft;
 

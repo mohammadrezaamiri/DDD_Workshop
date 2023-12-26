@@ -1,7 +1,9 @@
 using AutoFixture.Xunit2;
 using FluentAssertions;
-using Persistence.InMemory;
+using Persistence;
+using Persistence.Accounts;
 using Queries;
+using Queries.Accounts;
 using Services.AccountStories.OpenAccount;
 using TestTools.Doubles;
 
@@ -12,7 +14,7 @@ public class AccountOrchestratorSpec
     [Theory, AutoMoqData]
     public void Opens_a_new_account(
         string accountId,
-        [Frozen(Matching.ImplementedInterfaces)] Accounts _,
+        [Frozen(Matching.ImplementedInterfaces)] AccountRepository _,
         AccountQueries queries,
         OpenAccountCommandHandler accountOrchestrator
     )

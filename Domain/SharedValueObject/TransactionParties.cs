@@ -5,8 +5,8 @@ namespace Domain.SharedValueObject;
 
 public class TransactionParties: ValueObject
 {
-    public AccountId CreditAccountId { get; }
-    public AccountId DebitAccountId { get; }
+    public AccountId CreditAccountId { get; private set; }
+    public AccountId DebitAccountId { get; private set; }
 
     public TransactionParties(
         AccountId creditAccountId,

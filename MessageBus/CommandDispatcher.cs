@@ -18,10 +18,8 @@ public class CommandDispatcher : ICommandDispatcher
 
     public void Dispatch<TCommand>(TCommand message) where TCommand : ICommand
     {
-        var handlers = 
-            _serviceProvider.GetServices<ICommandHandler<TCommand>>();
-        
-        foreach (var handler in handlers)
-            handler.Handle(message);
+        var handler =
+            _serviceProvider.GetService<ICommandHandler<TCommand>>();
+        handler?.Handle(message);
     }
 }

@@ -26,6 +26,5 @@ public class DomainEventDispatcher : IDomainEventDispatcher
             foreach (var handler in handlers)
                 handler.Handle((dynamic)message);
         }
-            
     }
 }
