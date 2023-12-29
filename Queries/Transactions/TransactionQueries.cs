@@ -9,7 +9,7 @@ public class TransactionQueries
     public TransactionQueries(EFReadDataContext dbContext)
         => _dbContext = dbContext;
 
-    public IEnumerable<TransferDraftViewModel> AllDrafts()
+    public List<TransferDraftViewModel> AllDrafts()
         => _dbContext.Set<Transaction>()
             .Where(t => t.Status == TransferStatus.Draft)
             .Select(t => new TransferDraftViewModel(
@@ -17,5 +17,5 @@ public class TransactionQueries
                 t.Request.Parties.DebitAccountId.Value,
                 t.Request.Amount.Value,
                 t.Date
-            ));
+            )).ToList();
 }

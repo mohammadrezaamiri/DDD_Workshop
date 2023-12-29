@@ -27,9 +27,6 @@ public class TransactionRepository: ITransactions
     public Transaction? FindById(TransactionId id)
         => _dbContext.Set<Transaction>().FirstOrDefault(_ => _.Id == id);
 
-    public IEnumerable<Transaction> All()
-        => _dbContext.Set<Transaction>();
-
     public void Update(Transaction draft)
     {
         _dispatcher.Dispatch(draft.NewEvents);

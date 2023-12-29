@@ -1,7 +1,7 @@
-using AutoFixture.Xunit2;
-using Domain.Account;
 using Domain.SharedValueObject;
 using FluentAssertions;
+using MessageBus.DomainEventsBus;
+using Moq;
 using Persistence;
 using Persistence.Accounts;
 using Persistence.Transactions;
@@ -18,72 +18,83 @@ namespace Services.Spec;
 
 public class TransactionOrchestratorSpecs
 {
+    private readonly EFWriteDataContext _writeDbContext;
+    private readonly DraftTransferCommandHandler _draftSut;
+    private readonly CommitTransferCommandHandler _commitSut;
+    private readonly OpenAccountCommandHandler _accountCommandHandler;
+    private readonly AccountQueries _accountQueries;
+    private readonly TransactionQueries _transactionQueries;
+
+    public TransactionOrchestratorSpecs()
+    {
+        var db = new EFInMemoryDatabase();
+        var dispatcher = new Mock<IDomainEventDispatcher>().Object;
+        _writeDbContext = db.CreateDataContext<EFWriteDataContext>();
+        var transactions = new TransactionRepository(dispatcher, _writeDbContext);
+        _draftSut = new DraftTransferCommandHandler(transactions);
+        var accounts = new AccountRepository(dispatcher, _writeDbContext);
+        var transferService = new TransferService(accounts);
+        _commitSut = new CommitTransferCommandHandler(transactions, transferService);
+        _accountCommandHandler = new OpenAccountCommandHandler(accounts);
+        var readDataContext = db.CreateDataContext<EFReadDataContext>();
+        _accountQueries = new AccountQueries(readDataContext);
+        _transactionQueries = new TransactionQueries(readDataContext);
+    }
+    
     [Theory, AutoMoqData]
     public void Transfer_adds_the_balance_to_the_debit_account(
-        [Frozen(Matching.ImplementedInterfaces)] AccountRepository __,
-        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository ___,
-        [Frozen(Matching.ImplementedInterfaces)] TransferService _,
-        DraftTransferCommand draftCommand,
-        DraftTransferCommandHandler draftSut,
-        CommitTransferCommandHandler commitSut,
-        OpenAccountCommandHandler accountOrchestrator,
-        AccountQueries queries)
+        DraftTransferCommand draftCommand)
     {
-        accountOrchestrator.Handle(new OpenAccountCommand(
+        TestSut(() => _accountCommandHandler.Handle(new OpenAccountCommand(
                 draftCommand.CreditAccountId,
-                (draftCommand.Amount + new Money(20000)).Value));
+                (draftCommand.Amount + new Money(20000)).Value)));
         
-        draftSut.Handle(draftCommand);
+        TestSut(() => _draftSut.Handle(draftCommand));
 
-        commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId));
-
-        queries.GetBalanceForAccount(draftCommand.DebitAccountId).Should()
+        TestSut(() => _commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId)));
+        
+        _accountQueries.GetBalanceForAccount(draftCommand.DebitAccountId).Should()
             .BeEquivalentTo(new { Balance = draftCommand.Amount });
     }
 
 
     [Theory, AutoMoqData]
     public void Transfer_subtracts_the_balance_from_the_credit_account(
-        [Frozen(Matching.ImplementedInterfaces)] AccountRepository __,
-        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository ___,
-        [Frozen(Matching.ImplementedInterfaces)] TransferService _,
-        DraftTransferCommandHandler draftSut,
-        CommitTransferCommandHandler commitSut,
-        OpenAccountCommandHandler accountService,
-        DraftTransferCommand draftCommand,
-        AccountQueries queries)
+        DraftTransferCommand draftCommand)
     {
         var creditAccount = Build.AnAccount
             .WithId(draftCommand.CreditAccountId)
             .WithBalance(draftCommand.Amount + new Money(25000)).Please();
 
-        accountService.Handle(
+        TestSut(() => _accountCommandHandler.Handle(
             new OpenAccountCommand(
-                draftCommand.CreditAccountId, creditAccount.Balance.Value));
+                draftCommand.CreditAccountId, creditAccount.Balance.Value)));
 
-        draftSut.Handle(draftCommand);
+        TestSut(() => _draftSut.Handle(draftCommand));
 
-        commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId));
+        TestSut(() => _commitSut.Handle(new CommitTransferCommand(draftCommand.TransactionId)));
 
-        queries.GetBalanceForAccount(draftCommand.CreditAccountId).Should()
+        _accountQueries.GetBalanceForAccount(draftCommand.CreditAccountId).Should()
             .BeEquivalentTo(new { Balance = 25000 });
     }
 
     [Theory, AutoMoqData]
     public void Drafts_a_new_transaction(
-        [Frozen(Matching.ImplementedInterfaces)] TransactionRepository _,
-        DraftTransferCommandHandler sut,
-        TransactionQueries queries,
-        DraftTransferCommand command
-    )
+        DraftTransferCommand command)
     {
-        sut.Handle(command);
+        TestSut(() => _draftSut.Handle(command));
 
-        queries.AllDrafts().Should().Contain(new TransferDraftViewModel(
+        _transactionQueries.AllDrafts().Should().Contain(new TransferDraftViewModel(
             command.CreditAccountId,
             command.DebitAccountId,
             command.Amount,
             command.TransactionDate
         ));
+    }
+
+    private void TestSut(Action action)
+    {
+        action.Invoke();
+        _writeDbContext.SaveChanges();
     }
 }

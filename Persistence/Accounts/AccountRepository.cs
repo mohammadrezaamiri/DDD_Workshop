@@ -31,8 +31,4 @@ public class AccountRepository: IAccounts
         _dispatcher.Dispatch(account.NewEvents);
         account.ClearEvents();
     }
-    public List<Account> All()
-    {
-        return _dbContext.Set<Account>().ToList();
-    }
 }

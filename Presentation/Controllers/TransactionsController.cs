@@ -1,7 +1,6 @@
-using Domain.Transaction;
 using MessageBus;
 using Microsoft.AspNetCore.Mvc;
-using Services.TransactionStories;
+using Queries.Transactions;
 using Services.TransactionStories.CommitTransfer;
 using Services.TransactionStories.DraftTransfer;
 
@@ -12,11 +11,11 @@ namespace Presentation.Controllers;
 public class TransactionsController : ControllerBase
 {
     private readonly ICommandDispatcher _dispatcher;
-    private readonly ITransactions _transactions;
+    private readonly TransactionQueries _transactions;
 
     public TransactionsController(
         ICommandDispatcher dispatcher,
-        ITransactions transactions)
+        TransactionQueries transactions)
     {
         _dispatcher = dispatcher;
         _transactions = transactions;
@@ -31,6 +30,6 @@ public class TransactionsController : ControllerBase
         => _dispatcher.Dispatch(command);
 
     [HttpGet]
-    public List<Transaction> GetAll()
-        => _transactions.All().ToList();
+    public List<TransferDraftViewModel> GetAll()
+        => _transactions.AllDrafts();
 }

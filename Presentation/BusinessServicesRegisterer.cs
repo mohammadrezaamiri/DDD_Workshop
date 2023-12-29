@@ -25,6 +25,7 @@ public static class BusinessServicesRegisterer
         services.AddScoped<EFReadDataContext>();
         services.AddScoped<IAccounts, AccountRepository>();
         services.AddScoped<ITransactions, TransactionRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     public static void RegisterHandlers(this IServiceCollection services)

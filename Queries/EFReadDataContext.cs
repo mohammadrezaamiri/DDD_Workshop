@@ -12,6 +12,11 @@ public class EFReadDataContext : DbContext
     {
     }
     
+    private EFReadDataContext(DbContextOptions<EFReadDataContext> options)
+        : base(options)
+    {
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

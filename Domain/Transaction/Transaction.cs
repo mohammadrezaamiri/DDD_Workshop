@@ -10,6 +10,10 @@ public enum TransferStatus
 
 public class Transaction : AggregateRoot
 {
+    private Transaction()
+    {
+        
+    }
     public TransactionId Id { get; private set; }
     public TransferRequest Request { get; private set; }
     public DateTime Date { get; private set; }

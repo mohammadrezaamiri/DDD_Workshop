@@ -1,4 +1,5 @@
 using Domain.Account;
+using Microsoft.EntityFrameworkCore;
 
 namespace Queries.Accounts;
 
@@ -11,7 +12,7 @@ public class AccountQueries
     
     public BalanceViewModel? GetBalanceForAccount(string accountId)
         => _dbContext.Set<Account>()
-            .Where(_ => _.Id.Value == accountId)
+            .Where(_ => _.Id == new AccountId(accountId))
             .Select(_ => new BalanceViewModel(_.Id.Value, _.Balance.Value))
             .FirstOrDefault();
 
