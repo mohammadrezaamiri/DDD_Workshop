@@ -8,7 +8,9 @@ public class EFReadDataContext : DbContext
 {
     public EFReadDataContext()
         : base(new DbContextOptionsBuilder<EFReadDataContext>()
-            .UseSqlServer("server=.;database=Bank;integrated security=true").Options)
+            .UseSqlServer(
+                "server=.;database=Bank;Trusted_Connection=True;Encrypt=false;TrustServerCertificate=true;")
+            .Options)
     {
     }
     

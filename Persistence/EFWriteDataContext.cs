@@ -7,7 +7,9 @@ public class EFWriteDataContext : DbContext
 {
     public EFWriteDataContext()
         : base(new DbContextOptionsBuilder<EFWriteDataContext>()
-            .UseSqlServer("server=.;database=Bank;integrated security=true").Options)
+            .UseSqlServer(
+                "server=.;database=Bank;Trusted_Connection=True;Encrypt=false;TrustServerCertificate=true;")
+            .Options)
     {
     }
     
